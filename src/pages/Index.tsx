@@ -103,11 +103,11 @@ const PRODUCTS = [
 ];
 
 const REVIEWS = [
-  { id: 1, name: "Артём К.", game: "Brawl Stars", text: "Кристаллы пришли мгновенно! Уже третий раз покупаю, всё чисто.", stars: 5, avatar: "А" },
-  { id: 2, name: "Даша М.", game: "PUBG Mobile", text: "Промокод NEWGAMER дал -15%. Очень удобно, буду рекомендовать друзьям.", stars: 5, avatar: "Д" },
-  { id: 3, name: "Игорь П.", game: "Fortnite", text: "Боевой пропуск выдали за 2 минуты. Поддержка ответила быстро, молодцы.", stars: 5, avatar: "И" },
-  { id: 4, name: "Настя Л.", game: "Genshin Impact", text: "Всё честно и надёжно. Прозрачная история покупок в кабинете — удобно.", stars: 4, avatar: "Н" },
-  { id: 5, name: "Макс Т.", game: "Brawl Stars", text: "VIP статус открылся сразу. Скин огонь! Заказываю уже полгода.", stars: 5, avatar: "М" },
+  { id: 1, name: "Артём К.", game: "Brawl Stars", text: "170 гемов пришли за минуту! Взял скин на Эдгара, всё чисто. Уже третий раз покупаю.", stars: 5, avatar: "А" },
+  { id: 2, name: "Даша М.", game: "Brawl Stars", text: "Применила промокод NEWGAMER — сэкономила на Brawl Pass+. Очень удобно, советую всем!", stars: 5, avatar: "Д" },
+  { id: 3, name: "Игорь П.", game: "Brawl Stars", text: "Brawl Pass выдали за 2 минуты после оплаты. Поддержка ответила мгновенно, молодцы.", stars: 5, avatar: "И" },
+  { id: 4, name: "Настя Л.", game: "Brawl Stars", text: "Купила 80 гемов, всё пришло сразу. Честный магазин, больше нигде не покупаю.", stars: 5, avatar: "Н" },
+  { id: 5, name: "Макс Т.", game: "Brawl Stars", text: "Взял 950 гемов — цена лучше чем в AppStore. Гемы на аккаунте через 3 минуты. Огонь!", stars: 5, avatar: "М" },
 ];
 
 const FAQ_ITEMS = [

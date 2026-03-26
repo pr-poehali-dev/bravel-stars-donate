@@ -34,13 +34,13 @@
 
     --radius: 0.75rem;
 
-    --neon-cyan: #00f5ff;
-    --neon-purple: #a855f7;
-    --neon-orange: #f97316;
+    --neon-cyan: #00c8ff;
+    --neon-purple: #b44fff;
+    --neon-orange: #ffcc00;
     --neon-green: #22c55e;
-    --dark-bg: #080c14;
-    --dark-card: #0d1220;
-    --dark-border: #1e2a3a;
+    --dark-bg: #0a0814;
+    --dark-card: #120f1e;
+    --dark-border: #251f3a;
   }
 }
 
@@ -56,17 +56,17 @@
     background-image:
       radial-gradient(
         ellipse at 20% 50%,
-        rgba(0, 245, 255, 0.04) 0%,
+        rgba(180, 79, 255, 0.08) 0%,
         transparent 50%
       ),
       radial-gradient(
         ellipse at 80% 20%,
-        rgba(168, 85, 247, 0.05) 0%,
+        rgba(255, 204, 0, 0.06) 0%,
         transparent 50%
       ),
       radial-gradient(
         ellipse at 50% 90%,
-        rgba(249, 115, 22, 0.03) 0%,
+        rgba(0, 200, 255, 0.05) 0%,
         transparent 50%
       );
     min-height: 100vh;
@@ -91,8 +91,8 @@
   .neon-text-orange {
     color: var(--neon-orange);
     text-shadow:
-      0 0 20px rgba(249, 115, 22, 0.8),
-      0 0 40px rgba(249, 115, 22, 0.4);
+      0 0 20px rgba(255, 204, 0, 0.9),
+      0 0 40px rgba(255, 204, 0, 0.5);
   }
 
   .neon-text-purple {
@@ -112,8 +112,8 @@
   .neon-border-orange {
     border-color: var(--neon-orange);
     box-shadow:
-      0 0 15px rgba(249, 115, 22, 0.3),
-      inset 0 0 15px rgba(249, 115, 22, 0.05);
+      0 0 15px rgba(255, 204, 0, 0.35),
+      inset 0 0 15px rgba(255, 204, 0, 0.05);
   }
 
   .neon-border-purple {
@@ -150,24 +150,25 @@
   .btn-neon-orange {
     background: linear-gradient(
       135deg,
-      rgba(249, 115, 22, 0.9),
-      rgba(234, 88, 12, 0.9)
+      rgba(255, 204, 0, 0.95),
+      rgba(255, 176, 0, 0.9)
     );
-    border: 1px solid rgba(249, 115, 22, 0.5);
-    color: white;
-    box-shadow: 0 0 20px rgba(249, 115, 22, 0.4);
+    border: 1px solid rgba(255, 204, 0, 0.6);
+    color: #1a1200;
+    font-weight: 700;
+    box-shadow: 0 0 20px rgba(255, 204, 0, 0.4);
     transition: all 0.3s ease;
   }
 
   .btn-neon-orange:hover {
     background: linear-gradient(
       135deg,
-      rgba(249, 115, 22, 1),
-      rgba(234, 88, 12, 1)
+      rgba(255, 220, 30, 1),
+      rgba(255, 190, 0, 1)
     );
     box-shadow:
-      0 0 30px rgba(249, 115, 22, 0.6),
-      0 0 60px rgba(249, 115, 22, 0.3);
+      0 0 30px rgba(255, 204, 0, 0.65),
+      0 0 60px rgba(255, 204, 0, 0.25);
     transform: translateY(-2px);
   }
 

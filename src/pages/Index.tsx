@@ -209,12 +209,12 @@ export default function Index() {
       <header className="sticky top-0 z-50" style={{ background: "rgba(8,12,20,0.95)", borderBottom: "1px solid rgba(0,245,255,0.12)", backdropFilter: "blur(20px)" }}>
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: "linear-gradient(135deg, rgba(0,245,255,0.2), rgba(168,85,247,0.2))", border: "1px solid rgba(0,245,255,0.4)" }}>
-              <span className="text-xl">⚡</span>
+            <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: "linear-gradient(135deg, rgba(255,204,0,0.25), rgba(180,79,255,0.25))", border: "1px solid rgba(255,204,0,0.5)" }}>
+              <span className="text-xl">💎</span>
             </div>
             <div>
-              <div className="text-xl font-bold tracking-wider neon-text-cyan" style={{ fontFamily: "Oswald, sans-serif" }}>DONATESHOP</div>
-              <div className="text-xs" style={{ color: "rgba(255,255,255,0.35)", letterSpacing: "0.15em" }}>ИГРОВОЙ МАГАЗИН</div>
+              <div className="text-xl font-bold tracking-wider" style={{ fontFamily: "Oswald, sans-serif", color: "#ffcc00", textShadow: "0 0 20px rgba(255,204,0,0.7), 0 0 40px rgba(255,204,0,0.3)" }}>BRAWL GEMS</div>
+              <div className="text-xs" style={{ color: "rgba(255,255,255,0.35)", letterSpacing: "0.15em" }}>МАГАЗИН BRAWL STARS</div>
             </div>
           </div>
 
@@ -724,9 +724,9 @@ function ProductCard({ product: p, onBuy, colorClass, textColor, promoApplied, l
             className="px-5 py-2.5 rounded-xl text-sm font-bold transition-all hover:scale-105 active:scale-95"
             style={{
               fontFamily: "Oswald, sans-serif",
-              background: p.color === "orange" ? "linear-gradient(135deg, rgba(249,115,22,0.9), rgba(234,88,12,0.9))" : p.color === "purple" ? "rgba(168,85,247,0.22)" : "rgba(0,245,255,0.12)",
-              color: p.color === "orange" ? "white" : p.color === "purple" ? "var(--neon-purple)" : "var(--neon-cyan)",
-              border: p.color === "orange" ? "1px solid rgba(249,115,22,0.5)" : p.color === "purple" ? "1px solid rgba(168,85,247,0.5)" : "1px solid rgba(0,245,255,0.4)",
+              background: p.color === "orange" ? "linear-gradient(135deg, rgba(255,204,0,0.95), rgba(255,176,0,0.9))" : p.color === "purple" ? "rgba(180,79,255,0.22)" : "rgba(0,200,255,0.12)",
+              color: p.color === "orange" ? "#1a1200" : p.color === "purple" ? "var(--neon-purple)" : "var(--neon-cyan)",
+              border: p.color === "orange" ? "1px solid rgba(255,204,0,0.6)" : p.color === "purple" ? "1px solid rgba(180,79,255,0.5)" : "1px solid rgba(0,200,255,0.4)",
             }}
           >
             КУПИТЬ

@@ -1,0 +1,28 @@
+{
+  "tests": [
+    {
+      "name": "Create order",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "email": "test@example.com",
+        "product_id": 1,
+        "product_name": "30 гемов Brawl Stars",
+        "amount": 250,
+        "promo_applied": false
+      },
+      "expectedStatus": 200,
+      "expectedBody": { "success": true },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Get orders by email",
+      "method": "GET",
+      "path": "/?email=test@example.com",
+      "expectedStatus": 200,
+      "expectedBody": {},
+
+      "bodyMatcher": "partial"
+    }
+  ]
+}

@@ -117,7 +117,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "Что нужно указать для покупки гемов?",
-    a: "Только тег твоего аккаунта Brawl Stars — он выглядит так: #ABC123. Найти его можно в профиле игры. Пароль и почта не нужны.",
+    a: "Только твой email — на него придёт код подтверждения для получения гемов. Никаких паролей и тегов аккаунта не требуется.",
   },
   {
     q: "Безопасно ли покупать гемы здесь?",
@@ -152,8 +152,75 @@ export default function Index() {
   const [promoApplied, setPromoApplied] = useState(false);
   const [promoError, setPromoError] = useState(false);
   const [cartItem, setCartItem] = useState<number | null>(null);
-  const [gameNick, setGameNick] = useState("");
+  const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [orderStep, setOrderStep] = useState<"form" | "paying" | "code" | "done">("form");
+  const [orderId, setOrderId] = useState<number | null>(null);
+  const [verifyCode, setVerifyCode] = useState("");
+  const [codeInput, setCodeInput] = useState("");
+  const [codeError, setCodeError] = useState("");
+  const [codeLoading, setCodeLoading] = useState(false);
   const balance = 320;
+
+  const ORDERS_URL = "https://functions.poehali.dev/8258b341-f10d-40be-b4e3-26f9ed3dcd4e";
+
+  const handleCloseModal = () => {
+    setCartItem(null);
+    setOrderStep("form");
+    setEmail("");
+    setEmailError("");
+    setOrderId(null);
+    setVerifyCode("");
+    setCodeInput("");
+    setCodeError("");
+  };
+
+  const handlePay = async () => {
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setEmailError("Введи корректный email");
+      return;
+    }
+    setEmailError("");
+    const p = PRODUCTS.find((x) => x.id === cartItem)!;
+    const finalPrice = promoApplied ? Math.round(p.price * 0.85) : p.price;
+    setOrderStep("paying");
+
+    const res = await fetch(ORDERS_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, product_id: p.id, product_name: p.name, amount: finalPrice, promo_applied: promoApplied }),
+    });
+    const data = await res.json();
+    if (!data.order_id) { setOrderStep("form"); return; }
+
+    const payRes = await fetch(ORDERS_URL, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ order_id: data.order_id }),
+    });
+    const payData = await payRes.json();
+    setOrderId(data.order_id);
+    setVerifyCode(payData.verify_code || "");
+    setOrderStep("code");
+  };
+
+  const handleVerify = async () => {
+    if (!codeInput.trim()) { setCodeError("Введи код"); return; }
+    setCodeLoading(true);
+    setCodeError("");
+    const res = await fetch(ORDERS_URL + "/verify", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ order_id: orderId, code: codeInput.trim().toUpperCase() }),
+    });
+    const data = await res.json();
+    setCodeLoading(false);
+    if (data.success) {
+      setOrderStep("done");
+    } else {
+      setCodeError(data.error || "Неверный код");
+    }
+  };
 
   const handlePromo = () => {
     if (promoCode.toUpperCase() === "NEWGAMER") {
@@ -607,57 +674,107 @@ export default function Index() {
         const p = PRODUCTS.find((x) => x.id === cartItem)!;
         const finalPrice = promoApplied ? Math.round(p.price * 0.85) : p.price;
         return (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "rgba(0,0,0,0.8)", backdropFilter: "blur(12px)" }}>
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "rgba(0,0,0,0.85)", backdropFilter: "blur(12px)" }}>
             <div className="rounded-2xl p-6 w-full max-w-md animate-scale-in" style={{ background: "var(--dark-card)", border: "1px solid rgba(0,245,255,0.3)" }}>
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-xl font-bold text-white" style={{ fontFamily: "Oswald, sans-serif" }}>ОФОРМИТЬ ЗАКАЗ</h3>
-                <button onClick={() => setCartItem(null)} className="w-8 h-8 rounded-lg flex items-center justify-center transition-all hover:scale-110" style={{ background: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.5)" }}>
+                <h3 className="text-xl font-bold text-white" style={{ fontFamily: "Oswald, sans-serif" }}>
+                  {orderStep === "done" ? "ЗАКАЗ ВЫПОЛНЕН" : orderStep === "code" ? "ВВЕДИ КОД" : "ОФОРМИТЬ ЗАКАЗ"}
+                </h3>
+                <button onClick={handleCloseModal} className="w-8 h-8 rounded-lg flex items-center justify-center transition-all hover:scale-110" style={{ background: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.5)" }}>
                   <Icon name="X" size={16} />
                 </button>
               </div>
 
-              <div className="rounded-xl p-4 mb-4" style={{ background: "rgba(0,245,255,0.05)", border: "1px solid rgba(0,245,255,0.2)" }}>
-                <div className="font-bold text-white mb-1">{p.name}</div>
-                <div className="text-sm" style={{ color: "rgba(255,255,255,0.5)" }}>{p.description}</div>
-              </div>
-
-              <div className="space-y-3 mb-5">
-                <div className="flex justify-between text-sm">
-                  <span style={{ color: "rgba(255,255,255,0.5)" }}>Цена</span>
-                  <span className="text-white">{p.price} ₽</span>
+              {/* STEP: done */}
+              {orderStep === "done" && (
+                <div className="text-center py-4">
+                  <div className="text-5xl mb-4">🎉</div>
+                  <div className="text-lg font-bold text-white mb-2" style={{ fontFamily: "Oswald, sans-serif" }}>Заказ подтверждён!</div>
+                  <div className="text-sm mb-6" style={{ color: "rgba(255,255,255,0.5)" }}>Гемы будут зачислены в течение 1–3 минут</div>
+                  <button onClick={handleCloseModal} className="btn-neon-orange w-full py-3 rounded-xl font-bold" style={{ fontFamily: "Oswald, sans-serif" }}>
+                    ЗАКРЫТЬ
+                  </button>
                 </div>
-                {promoApplied && (
-                  <div className="flex justify-between text-sm">
-                    <span style={{ color: "#22c55e" }}>Промокод NEWGAMER</span>
-                    <span style={{ color: "#22c55e" }}>-{p.price - finalPrice} ₽</span>
+              )}
+
+              {/* STEP: code verification */}
+              {orderStep === "code" && (
+                <div>
+                  <div className="rounded-xl p-4 mb-5 text-center" style={{ background: "rgba(0,245,255,0.05)", border: "1px solid rgba(0,245,255,0.2)" }}>
+                    <div className="text-xs mb-1" style={{ color: "rgba(255,255,255,0.4)", fontFamily: "Oswald, sans-serif", letterSpacing: "0.1em" }}>КОД ПОДТВЕРЖДЕНИЯ</div>
+                    <div className="text-3xl font-bold tracking-widest neon-text-cyan" style={{ fontFamily: "Oswald, sans-serif" }}>{verifyCode}</div>
+                    <div className="text-xs mt-2" style={{ color: "rgba(255,255,255,0.35)" }}>Введи этот код ниже для получения гемов</div>
                   </div>
-                )}
-                <div className="h-px" style={{ background: "rgba(255,255,255,0.08)" }} />
-                <div className="flex justify-between font-bold">
-                  <span className="text-white" style={{ fontFamily: "Oswald, sans-serif" }}>ИТОГО</span>
-                  <span className="neon-text-cyan text-lg" style={{ fontFamily: "Oswald, sans-serif" }}>{finalPrice} ₽</span>
+                  <div className="mb-4">
+                    <label className="text-sm mb-2 block" style={{ color: "rgba(255,255,255,0.45)" }}>Код подтверждения</label>
+                    <input
+                      type="text"
+                      value={codeInput}
+                      onChange={(e) => setCodeInput(e.target.value.toUpperCase())}
+                      placeholder="Введи код..."
+                      maxLength={8}
+                      className="w-full px-4 py-3 rounded-xl outline-none text-sm text-center tracking-widest font-bold"
+                      style={{ background: "rgba(255,255,255,0.05)", border: codeError ? "1px solid rgba(239,68,68,0.6)" : "1px solid rgba(0,245,255,0.3)", color: "white", fontFamily: "Oswald, sans-serif", letterSpacing: "0.2em" }}
+                    />
+                    {codeError && <p className="text-xs mt-1.5" style={{ color: "#ef4444" }}>{codeError}</p>}
+                  </div>
+                  <button onClick={handleVerify} disabled={codeLoading} className="btn-neon-orange w-full py-3 rounded-xl font-bold text-base" style={{ fontFamily: "Oswald, sans-serif", opacity: codeLoading ? 0.7 : 1 }}>
+                    <span className="flex items-center justify-center gap-2">
+                      <Icon name={codeLoading ? "Loader" : "CheckCircle"} size={18} />
+                      {codeLoading ? "ПРОВЕРЯЮ..." : "ПОДТВЕРДИТЬ"}
+                    </span>
+                  </button>
                 </div>
-              </div>
+              )}
 
-              <div className="mb-5">
-                <label className="text-sm mb-2 block" style={{ color: "rgba(255,255,255,0.45)" }}>Ник в игре / ID аккаунта</label>
-                <input
-                  type="text"
-                  value={gameNick}
-                  onChange={(e) => setGameNick(e.target.value)}
-                  placeholder="Введи свой игровой ник..."
-                  className="w-full px-4 py-3 rounded-xl outline-none text-sm"
-                  style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(0,245,255,0.3)", color: "white", fontFamily: "Rubik, sans-serif" }}
-                />
-              </div>
+              {/* STEP: form + paying */}
+              {(orderStep === "form" || orderStep === "paying") && (
+                <div>
+                  <div className="rounded-xl p-4 mb-4" style={{ background: "rgba(0,245,255,0.05)", border: "1px solid rgba(0,245,255,0.2)" }}>
+                    <div className="font-bold text-white mb-1">{p.name}</div>
+                    <div className="text-sm" style={{ color: "rgba(255,255,255,0.5)" }}>{p.description}</div>
+                  </div>
 
-              <button className="btn-neon-orange w-full py-3 rounded-xl font-bold text-base" style={{ fontFamily: "Oswald, sans-serif" }}>
-                <span className="flex items-center justify-center gap-2">
-                  <Icon name="CreditCard" size={18} />
-                  ОПЛАТИТЬ {finalPrice} ₽
-                </span>
-              </button>
-              <p className="text-center text-xs mt-3" style={{ color: "rgba(255,255,255,0.25)" }}>🔒 Безопасная оплата · Мгновенная выдача</p>
+                  <div className="space-y-3 mb-5">
+                    <div className="flex justify-between text-sm">
+                      <span style={{ color: "rgba(255,255,255,0.5)" }}>Цена</span>
+                      <span className="text-white">{p.price} ₽</span>
+                    </div>
+                    {promoApplied && (
+                      <div className="flex justify-between text-sm">
+                        <span style={{ color: "#22c55e" }}>Промокод NEWGAMER</span>
+                        <span style={{ color: "#22c55e" }}>-{p.price - finalPrice} ₽</span>
+                      </div>
+                    )}
+                    <div className="h-px" style={{ background: "rgba(255,255,255,0.08)" }} />
+                    <div className="flex justify-between font-bold">
+                      <span className="text-white" style={{ fontFamily: "Oswald, sans-serif" }}>ИТОГО</span>
+                      <span className="neon-text-cyan text-lg" style={{ fontFamily: "Oswald, sans-serif" }}>{finalPrice} ₽</span>
+                    </div>
+                  </div>
+
+                  <div className="mb-5">
+                    <label className="text-sm mb-2 block" style={{ color: "rgba(255,255,255,0.45)" }}>Email для получения заказа</label>
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => { setEmail(e.target.value); setEmailError(""); }}
+                      placeholder="example@mail.ru"
+                      className="w-full px-4 py-3 rounded-xl outline-none text-sm"
+                      style={{ background: "rgba(255,255,255,0.05)", border: emailError ? "1px solid rgba(239,68,68,0.6)" : "1px solid rgba(0,245,255,0.3)", color: "white", fontFamily: "Rubik, sans-serif" }}
+                    />
+                    {emailError && <p className="text-xs mt-1.5" style={{ color: "#ef4444" }}>{emailError}</p>}
+                  </div>
+
+                  <button onClick={handlePay} disabled={orderStep === "paying"} className="btn-neon-orange w-full py-3 rounded-xl font-bold text-base" style={{ fontFamily: "Oswald, sans-serif", opacity: orderStep === "paying" ? 0.7 : 1 }}>
+                    <span className="flex items-center justify-center gap-2">
+                      <Icon name={orderStep === "paying" ? "Loader" : "CreditCard"} size={18} />
+                      {orderStep === "paying" ? "ОБРАБАТЫВАЮ..." : `ОПЛАТИТЬ ${finalPrice} ₽`}
+                    </span>
+                  </button>
+                  <p className="text-center text-xs mt-3" style={{ color: "rgba(255,255,255,0.25)" }}>🔒 Безопасная оплата · Мгновенная выдача</p>
+                </div>
+              )}
             </div>
           </div>
         );

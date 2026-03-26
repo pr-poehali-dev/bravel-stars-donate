@@ -6,9 +6,9 @@ const HERO_IMG = "https://cdn.poehali.dev/projects/7c7598fb-8c1f-4e17-9379-2c24b
 const PRODUCTS = [
   {
     id: 1,
-    name: "Стартовый набор",
-    description: "100 кристаллов + бонус 20",
-    price: 99,
+    name: "30 гемов Brawl Stars",
+    description: "30 гемов на аккаунт Brawl Stars",
+    price: 250,
     oldPrice: null,
     badge: "СТАРТ",
     badgeClass: "badge-new",

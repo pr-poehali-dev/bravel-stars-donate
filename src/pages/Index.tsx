@@ -194,10 +194,10 @@ export default function Index() {
         <div className="flex animate-ticker whitespace-nowrap">
           {[...Array(2)].map((_, i) => (
             <span key={i} className="flex items-center gap-8 px-4 text-sm" style={{ fontFamily: "Oswald, sans-serif", letterSpacing: "0.1em" }}>
-              <span style={{ color: "rgba(0,245,255,0.8)" }}>⚡ МОМЕНТАЛЬНАЯ ВЫДАЧА</span>
+              <span style={{ color: "rgba(0,245,255,0.8)" }}>⚡ МОМЕНТАЛЬНАЯ ВЫДАЧА ГЕМОВ</span>
               <span style={{ color: "rgba(168,85,247,0.8)" }}>🔥 ПРОМОКОД: NEWGAMER -15%</span>
-              <span style={{ color: "rgba(0,245,255,0.8)" }}>⚡ БОЛЕЕ 50 000 ПОКУПАТЕЛЕЙ</span>
-              <span style={{ color: "rgba(249,115,22,0.8)" }}>🎮 ПОДДЕРЖКА 24/7</span>
+              <span style={{ color: "rgba(0,245,255,0.8)" }}>💎 ГЕМЫ BRAWL STARS ОТ 250 ₽</span>
+              <span style={{ color: "rgba(249,115,22,0.8)" }}>🎮 BRAWL PASS И BRAWL PASS+</span>
               <span style={{ color: "rgba(0,245,255,0.8)" }}>⚡ ГАРАНТИЯ ВЫДАЧИ</span>
               <span style={{ color: "rgba(34,197,94,0.8)" }}>✅ ОФИЦИАЛЬНЫЕ МЕТОДЫ</span>
             </span>
@@ -283,14 +283,14 @@ export default function Index() {
                   МАГАЗИН ОНЛАЙН
                 </div>
                 <h1 className="text-4xl md:text-6xl font-bold mb-4 leading-tight" style={{ fontFamily: "Oswald, sans-serif" }}>
-                  <span className="neon-text-cyan">ДОНАТ</span>
+                  <span className="neon-text-cyan">ГЕМЫ</span>
                   <br />
-                  <span style={{ color: "white" }}>БЕЗ ЛИШНИХ</span>
+                  <span style={{ color: "white" }}>BRAWL STARS</span>
                   <br />
-                  <span className="neon-text-orange">ЗАМОРОЧЕК</span>
+                  <span className="neon-text-orange">ДЁШЕВО И БЫСТРО</span>
                 </h1>
                 <p className="text-lg mb-8 max-w-md" style={{ color: "rgba(255,255,255,0.65)" }}>
-                  Моментальная выдача, честные цены, промокоды. Уже 50 000+ довольных игроков.
+                  Гемы и Brawl Pass за честную цену. Моментальная выдача на аккаунт. Уже 50 000+ довольных игроков.
                 </p>
                 <div className="flex flex-wrap gap-4">
                   <button onClick={() => setActiveTab("catalog")} className="btn-neon-orange px-8 py-3 rounded-xl text-base font-bold" style={{ fontFamily: "Oswald, sans-serif", letterSpacing: "0.08em" }}>
